@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { Button, ScrollView, StyleSheet, Text, TextInput, View, ViewBase, _View } from 'react-native';
+import { Button, ScrollView, StyleSheet, Text, TextInput, View, FlatList, TouchableOpacity } from 'react-native';
 import React from 'react';
 
 export default function App() {
@@ -136,9 +136,14 @@ export default function App() {
       }
     ]
   )
-
   const list = [...Array(5).keys()];
   
+
+  const touchable = (id)=>{
+    const selectedItem = (objects.find(object => object.id == id))
+    alert(selectedItem.title);
+  }  
+
   return (
     <View style={styles.container}>
       <Text style={styles.myStyle}>{user} esta {action}</Text>
@@ -175,7 +180,7 @@ export default function App() {
             Number=>{
               return (
                 <View key={Number}>
-                  <Text>Hola soy el {Number} numero</Text>
+                  <Text>Hola soy el numero {Number+1}</Text>
                 </View>
               )
             }
@@ -184,6 +189,26 @@ export default function App() {
           
         </ScrollView>
       </View>
+
+      <FlatList 
+        numColumns={3}
+        key={(item)=>{item.id.toString()}}
+        data={objects}
+        renderItem={({item})=>(
+            <TouchableOpacity
+              // onPress={touchable(item.id )}  why it doesn't work like this?
+              onPress={()=>{
+                touchable(item.id)
+              }}
+            > 
+              <Text
+                style={styles.flatItems}>
+                {item.title}
+              </Text>
+            </TouchableOpacity>
+          )
+        }
+      />
 
       <StatusBar style="auto" />
     </View>
@@ -223,5 +248,10 @@ const styles = StyleSheet.create({
     marginBottom:5,
     marginStart:2,
     marginEnd:2
+  },
+  flatItems:{
+    backgroundColor:"pink",
+    margin:3
   }
+
 });
