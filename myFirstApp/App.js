@@ -10,7 +10,6 @@ export default function App() {
     setUser("JuanitoJose")
     setAction("aprendiendo")
   }
-
   // our objetcs list
   const [objects,setObjects] = useState(
     [
@@ -136,13 +135,17 @@ export default function App() {
       }
     ]
   )
-  const list = [...Array(5).keys()];
-  
 
+  const list = [...Array(5).keys()];
   const touchable = (id)=>{
-    const selectedItem = (objects.find(object => object.id == id))
-    alert(selectedItem.title);
-  }  
+    let items = [...objects]
+    const selectedItem = (items.find(object => object.id == id))
+    console.log("Completed: "+selectedItem.completed);
+    selectedItem.completed=true;  
+    console.log(selectedItem.title);
+    console.log("Completed: "+selectedItem.completed);
+    setObjects(items)
+  }
 
   return (
     <View style={styles.container}>
@@ -196,13 +199,16 @@ export default function App() {
         data={objects}
         renderItem={({item})=>(
             <TouchableOpacity
-              // onPress={touchable(item.id )}  why it doesn't work like this?
+              // onPress={touchable(item.id )}  why it doesn't work like this? / why does it works without the paremeter item??
               onPress={()=>{
                 touchable(item.id)
               }}
             > 
               <Text
-                style={styles.flatItems}>
+                style={{
+                  ...styles.flatItems,
+                  backgroundColor:item.completed?"green":"pink"
+                  }}>
                 {item.title}
               </Text>
             </TouchableOpacity>
@@ -242,7 +248,6 @@ const styles = StyleSheet.create({
     padding:10,
     margin:10
   },
-
   listViews:{
     marginTop:5,
     marginBottom:5,
@@ -250,8 +255,6 @@ const styles = StyleSheet.create({
     marginEnd:2
   },
   flatItems:{
-    backgroundColor:"pink",
     margin:3
   }
-
-});
+})
